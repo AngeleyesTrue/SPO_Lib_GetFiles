@@ -1,0 +1,10 @@
+# Rules in this file were initially inferred by Visual Studio IntelliCode from the E:\Sources\GitHub\AE.O365.GetFiles codebase based on best match to current usage at 2022-04-21
+# You can modify the rules from these initially generated values to suit your own policies
+# You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
+[*.cs]
+
+
+#Formatting - spacing options
+
+#do not place space characters after the opening parenthesis and before the closing parenthesis of a method call
+csharp_space_between_method_call_parameter_list_parentheses = false
