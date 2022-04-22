@@ -54,7 +54,7 @@ public class AuthenticationManager : IDisposable
             {
                 // No async methods are allowed in a lock section
                 string accessToken = await AcquireTokenAsync(resourceUri, userPrincipalName, userPassword).ConfigureAwait(false);
-                Console.WriteLine($"Successfully requested new access token resource {resourceUri.DnsSafeHost} for user {userPrincipalName}");
+                //Console.WriteLine($"Successfully requested new access token resource {resourceUri.DnsSafeHost} for user {userPrincipalName}");
                 AddTokenToCache(resourceUri, tokenCache, accessToken);
 
                 // Register a thread to invalidate the access token once's it's expired
@@ -107,7 +107,7 @@ public class AuthenticationManager : IDisposable
         }
         else
         {
-            Console.WriteLine($"Returning token from cache for resource {resourceUri.DnsSafeHost} and user {userPrincipalName}");
+            //Console.WriteLine($"Returning token from cache for resource {resourceUri.DnsSafeHost} and user {userPrincipalName}");
             return accessTokenFromCache;
         }
     }
