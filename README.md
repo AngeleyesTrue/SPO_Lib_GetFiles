@@ -10,6 +10,16 @@ dotnet core 버전은 SharePointOnlineCredentials 를 지원하지 않아 다른 방식으로 인
 
 ## Technologies
 
+사용된 기술
+
+### AE.O365.GetFiles.CSApp 
+
+- dotnet core 6
+- [Microsoft.Extensions.Configuration.Json](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.Json)
+- [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection)
+- [Microsoft.Extensions.Logging](https://www.nuget.org/packages/Microsoft.Extensions.Logging)
+- [Microsoft.Extensions.Logging.Console](https://www.nuget.org/packages/Microsoft.Extensions.Logging.Console)
+- [Microsoft.Extensions.Logging.Debug](https://www.nuget.org/packages/Microsoft.Extensions.Logging.Debug)
 - [Microsoft.SharePointOnline.CSOM](https://www.nuget.org/packages/Microsoft.SharePointOnline.CSOM)
 - [ByteSize](https://www.nuget.org/packages/ByteSize)
 - [System.IdentityModel](https://www.nuget.org/packages/System.IdentityModel.Tokens.Jwt)
