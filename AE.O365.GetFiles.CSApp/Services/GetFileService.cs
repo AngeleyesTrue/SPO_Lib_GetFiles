@@ -111,12 +111,12 @@ public class GetFileService : IService
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.Start();
 
-		string strSiteUrl = GetText("Url을 입력하여 주십시오.");
-		string strTenatId = GetText("Tenat ID를 입력하여 주십시오.");
-		string strAccountId = GetText("사용자 ID을 입력하여 주십시오.");
-		string strAccountPwd = GetPassword("사용자 비밀번호를 입력하여 주십시오.");
+        string strSiteUrl = GetText("Url을 입력하여 주십시오.");
+        string strTenatId = GetText("Tenat ID를 입력하여 주십시오.");
+        string strAccountId = GetText("사용자 ID을 입력하여 주십시오.");
+        string strAccountPwd = GetPassword("사용자 비밀번호를 입력하여 주십시오.");
 
-		SecureString oAccountPassword = new SecureString();
+        SecureString oAccountPassword = new SecureString();
 		string strPassowrd = strAccountPwd;
 		foreach (char c in strPassowrd)
 		{
@@ -142,6 +142,7 @@ public class GetFileService : IService
 				var lists = web.Lists;
 				var Libraries = ctx.LoadQuery(lists.Where(l => l.BaseTemplate == 101));
 
+				ctx.Load(site);
 				ctx.Load(site, s => s.Usage);
 				ctx.Load(web);
 				ctx.ExecuteQueryWithIncrementalRetry();
@@ -152,6 +153,7 @@ public class GetFileService : IService
 				foreach (var library in Libraries)
 				{
 					#region // Set Library Info //
+					ctx.Load(library);
 					ctx.Load(library, l => l.RootFolder);
 					ctx.ExecuteQueryWithIncrementalRetry();
 

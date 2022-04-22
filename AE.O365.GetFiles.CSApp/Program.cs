@@ -3,7 +3,6 @@ using AE.O365.GetFiles.CSApp.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 
 namespace AE.O365.GetFiles.CSApp;
 
@@ -20,15 +19,18 @@ public class Program
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger<Program>();
 
-        if (Debugger.IsAttached)
+        try
         {
-            Console.ReadLine();
+
+            var getfiles = serviceProvider.GetService<IService>();
+            getfiles.Run();
+
+            logger.LogDebug("All done!");
         }
-
-        var getfiles = serviceProvider.GetService<IService>();
-        getfiles.Run();
-
-        logger.LogDebug("All done!");
+        catch (Exception ex)
+        {
+            logger.LogError(ex, ex.Message);
+        }
     }
 
     static void ConfigureServices(IServiceCollection serviceCollection)
