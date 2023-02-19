@@ -117,7 +117,7 @@ namespace AE.O365.GetFiles.Fromework.CSApp
 					var site = ctx.Site;
 					var web = ctx.Web;
 					var lists = web.Lists;
-					var Libraries = ctx.LoadQuery(lists.Where(l => l.BaseTemplate == 101));
+					var Libraries = ctx.LoadQuery(lists.Where(l => l.BaseTemplate == 101 || l.BaseTemplate == 700));
 
 					ctx.Load(site);
 					ctx.Load(site, s => s.Usage);
