@@ -21,13 +21,13 @@ public class AuthenticationManager : IDisposable
 
     // Token cache handling
     private static readonly SemaphoreSlim semaphoreSlimTokens = new SemaphoreSlim(1);
-    private AutoResetEvent tokenResetEvent = null;
+    private AutoResetEvent? tokenResetEvent = null;
     private readonly ConcurrentDictionary<string, string> tokenCache = new ConcurrentDictionary<string, string>();
     private bool disposedValue;
 
     internal class TokenWaitInfo
     {
-        public RegisteredWaitHandle Handle = null;
+        public RegisteredWaitHandle? Handle = null;
     }
 
     public ClientContext GetContext(Uri web, string userPrincipalName, SecureString userPassword)
@@ -46,16 +46,16 @@ public class AuthenticationManager : IDisposable
 
     public async Task<string> EnsureAccessTokenAsync(Uri resourceUri, string userPrincipalName, string userPassword)
     {
-        string accessTokenFromCache = TokenFromCache(resourceUri, tokenCache);
+        string? accessTokenFromCache = TokenFromCache(resourceUri, tokenCache);
         if (accessTokenFromCache == null)
         {
             await semaphoreSlimTokens.WaitAsync().ConfigureAwait(false);
             try
             {
                 // No async methods are allowed in a lock section
-                string accessToken = await AcquireTokenAsync(resourceUri, userPrincipalName, userPassword).ConfigureAwait(false);
+                string? accessToken = await AcquireTokenAsync(resourceUri, userPrincipalName, userPassword).ConfigureAwait(false);
                 //Console.WriteLine($"Successfully requested new access token resource {resourceUri.DnsSafeHost} for user {userPrincipalName}");
-                AddTokenToCache(resourceUri, tokenCache, accessToken);
+                AddTokenToCache(resourceUri, tokenCache, accessToken!);
 
                 // Register a thread to invalidate the access token once's it's expired
                 tokenResetEvent = new AutoResetEvent(false);
@@ -64,10 +64,10 @@ public class AuthenticationManager : IDisposable
                     tokenResetEvent,
                     async (state, timedOut) =>
                     {
-                        if (!timedOut)
+                        if (!timedOut && state != null)
                         {
                             TokenWaitInfo internalWaitToken = (TokenWaitInfo)state;
-                            if (internalWaitToken.Handle != null)
+                            if (internalWaitToken?.Handle != null)
                             {
                                 internalWaitToken.Handle.Unregister(null);
                             }
@@ -93,11 +93,11 @@ public class AuthenticationManager : IDisposable
                         }
                     },
                     wi,
-                    (uint)CalculateThreadSleep(accessToken).TotalMilliseconds,
+                    (uint)CalculateThreadSleep(accessToken!).TotalMilliseconds,
                     true
                 );
 
-                return accessToken;
+                return accessToken!;
 
             }
             finally
@@ -112,7 +112,7 @@ public class AuthenticationManager : IDisposable
         }
     }
 
-    private async Task<string> AcquireTokenAsync(Uri resourceUri, string username, string password)
+    private async Task<string?> AcquireTokenAsync(Uri resourceUri, string username, string password)
     {
         try
         {
@@ -141,9 +141,9 @@ public class AuthenticationManager : IDisposable
         return "";
     }
 
-    private static string TokenFromCache(Uri web, ConcurrentDictionary<string, string> tokenCache)
+    private static string? TokenFromCache(Uri web, ConcurrentDictionary<string, string> tokenCache)
     {
-        if (tokenCache.TryGetValue(web.DnsSafeHost, out string accessToken))
+        if (tokenCache.TryGetValue(web.DnsSafeHost, out string? accessToken))
         {
             return accessToken;
         }
@@ -153,7 +153,7 @@ public class AuthenticationManager : IDisposable
 
     private static void AddTokenToCache(Uri web, ConcurrentDictionary<string, string> tokenCache, string newAccessToken)
     {
-        if (tokenCache.TryGetValue(web.DnsSafeHost, out string currentAccessToken))
+        if (tokenCache.TryGetValue(web.DnsSafeHost, out string? currentAccessToken))
         {
             tokenCache.TryUpdate(web.DnsSafeHost, newAccessToken, currentAccessToken);
         }
@@ -165,7 +165,7 @@ public class AuthenticationManager : IDisposable
 
     private static void RemoveTokenFromCache(Uri web, ConcurrentDictionary<string, string> tokenCache)
     {
-        tokenCache.TryRemove(web.DnsSafeHost, out string currentAccessToken);
+        tokenCache.TryRemove(web.DnsSafeHost, out string? currentAccessToken);
     }
 
     private static TimeSpan CalculateThreadSleep(string accessToken)

@@ -23,7 +23,7 @@ public class Program
         {
 
             var getfiles = serviceProvider.GetService<IService>();
-            getfiles.Run();
+            getfiles?.Run();
 
             logger.LogDebug("All done!");
         }
