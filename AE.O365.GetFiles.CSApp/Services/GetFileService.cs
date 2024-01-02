@@ -46,7 +46,7 @@ public class GetFileService : IService
     {
         Console.WriteLine(strMessage);
 
-        string strReadText = Console.ReadLine();
+        string? strReadText = Console.ReadLine();
         if (String.IsNullOrEmpty(strReadText))
         {
             while (true)
@@ -208,11 +208,11 @@ public class GetFileService : IService
 
 						foreach (var file in data)
 						{
-							if (file != null && file.FieldValues != null && file.FieldValues.Any())
+							if (file?.FieldValues?.Any() == true)
 							{
-								string strFileName = Convert.ToString(file.FieldValues["FileLeafRef"]);
-								string strExtension = strFileName.Substring(strFileName.LastIndexOf(".") + 1, strFileName.Length - strFileName.LastIndexOf(".") - 1);
-								strExtension = strExtension.ToLower();
+								string? strFileName = Convert.ToString(file.FieldValues["FileLeafRef"]);
+								string? strExtension = strFileName?.Substring(strFileName.LastIndexOf(".") + 1, strFileName.Length - strFileName.LastIndexOf(".") - 1);
+								strExtension = strExtension?.ToLower();
 
 								DateTime dtCreated = Convert.ToDateTime(file.FieldValues["Created"]);
 								DateTime dtModified = Convert.ToDateTime(file.FieldValues["Modified"]);
